@@ -27,6 +27,13 @@ public class PlayerSpawnObject : NetworkBehaviour
     // 클라, 서버 두 군데 모두 작동해야 하는 부분을 작성해야 함.
     public void Update()
     {
+        string netTypeStr = isClient ? "클라" : "클라 아님";
+
+
+        TextMesh_NetType.text = this.isLocalPlayer ?
+            $"{netId} : [로컬 / {netTypeStr}]" 
+            : $"{netId} : [로컬 아님 / {netTypeStr}]";
+
         SetHealthbarOnUpdate(_health);
 
         if (CheckIsFocusedOnUpdate() == false) return;
