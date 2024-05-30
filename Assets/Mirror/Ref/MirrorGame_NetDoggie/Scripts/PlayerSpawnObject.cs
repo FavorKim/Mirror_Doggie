@@ -85,20 +85,30 @@ public class PlayerSpawnObject : NetworkBehaviour
     {
         GameObject atkObjectForSpawn = Instantiate(Prefab_AtkObject, Transform_AtkSpawnPos.transform.position, Transform_AtkSpawnPos.transform.rotation);
         NetworkServer.Spawn(atkObjectForSpawn);
-
+        RpcOnAttack();  
     }
 
     [ClientRpc]
     private void RpcOnAttack()
     {
-
+        Debug.Log($"{this.netId}가 공격");
+        Animator_Player.SetTrigger("Atk");
     }
 
     // 클라에서 아래 함수가 실행되지 않게 함 (서버, 클라 둘 다 실행하면 안되는 경우. 서버에서만 실행해야하는 경우.)
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        
+        var atkGenObj = other.GetComponent<atkobj>();
+
+        if (atkGenObj == null) return;
+
+        _health--;
+
+        if (_health <= 0) 
+        {
+            NetworkServer.Destroy(this.gameObject);
+        }
     }
 
 }
