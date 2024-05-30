@@ -31,6 +31,7 @@ public class PlayerSpawnObject : NetworkBehaviour
 
 
         TextMesh_NetType.text = this.isLocalPlayer ?
+            
             $"{netId} : [로컬 / {netTypeStr}]" 
             : $"{netId} : [로컬 아님 / {netTypeStr}]";
 
@@ -102,6 +103,8 @@ public class PlayerSpawnObject : NetworkBehaviour
     Rpc는 모든 클라이언트가 실행하는 것이 아니라 호출한 클라이언트만 실행하는가?
     위의 코드에서, 생성은 서버만 할 것이고, Rpc를 호출하며 모든 클라에서 rpc를 호출하는 것이 아닌가?
     그게 아니라면 다른 클라이언트는 다른 클라이언트의 애니메이션이 실행되는 것을 확인할 방법이 없다.
+
+    호출한 녀석의 Rpc 함수가 모든 클라이언트에 반영된다.
     */
 
     [ClientRpc] 

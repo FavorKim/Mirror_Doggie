@@ -138,10 +138,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4289246088723482397}
   - component: {fileID: 4722395475520509609}
-  - component: {fileID: 3243030046070922146}
   - component: {fileID: 634046762021369880}
   - component: {fileID: 8152809407582396284}
   - component: {fileID: 1557388369905101906}
+  - component: {fileID: 9067755220183803421}
   m_Layer: 0
   m_Name: NetPlayer
   m_TagString: Untagged
@@ -191,31 +191,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3243030046070922146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 979650944014736374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8714f42d2033db94b823e233c8b5685b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  NavAgent_Player: {fileID: 4722395475520509609}
-  Animator_Player: {fileID: 6628332597890887826}
-  TextMesh_HealthBar: {fileID: 9068747096743046193}
-  TextMesh_NetType: {fileID: 576363395506844754}
-  Transform_Player: {fileID: 4289246088723482397}
-  _rotationSpeed: 100
-  _atkKey: 32
-  Prefab_AtkObject: {fileID: 6003494680541780875, guid: 6bfe51ca2ed1a2a4ba5a7b92cb48ff92, type: 3}
-  Transform_AtkSpawnPos: {fileID: 5118409777024811386}
-  _health: 4
 --- !u!114 &634046762021369880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +256,32 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.8
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &9067755220183803421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979650944014736374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f676be3e5867fd04bb1a4f03fc58147a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  Transform_Player: {fileID: 4289246088723482397}
+  Animator_Player: {fileID: 6628332597890887826}
+  Transform_AtkPos: {fileID: 5118409777024811386}
+  TextMesh_Healthbar: {fileID: 9068747096743046193}
+  TextMesh_HUD: {fileID: 576363395506844754}
+  NavAgent_Player: {fileID: 4722395475520509609}
+  _projectileObjPrefab: {fileID: 6003494680541780875, guid: 6bfe51ca2ed1a2a4ba5a7b92cb48ff92, type: 3}
+  atkKey: 32
+  _rotationSpeed: 100
+  _health: 4
+  netState: 
 --- !u!1 &5704646795369533241
 GameObject:
   m_ObjectHideFlags: 0

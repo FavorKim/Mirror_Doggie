@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3784148209111490345}
   - component: {fileID: 6568587602532190254}
   - component: {fileID: 6402461997911307430}
-  - component: {fileID: 4172093181024428905}
+  - component: {fileID: 6136818700797485975}
   m_Layer: 0
   m_Name: NetSpawnObj
   m_TagString: Untagged
@@ -82,7 +82,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4172093181024428905
+--- !u!114 &6136818700797485975
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,15 +91,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6003494680541780875}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0edf46f7b5ed55845943aa42ce8f8272, type: 3}
+  m_Script: {fileID: 11500000, guid: 09dbe8360daa2fa46bc234b22971bcc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _destroyDelay: 7
+  RigidBody_Projectile: {fileID: 6568587602532190254}
   _force: 1000
-  RigidBody_AtkObject: {fileID: 6568587602532190254}
+  _destroyDelay: 5
 --- !u!1 &7511170337234852529
 GameObject:
   m_ObjectHideFlags: 0
