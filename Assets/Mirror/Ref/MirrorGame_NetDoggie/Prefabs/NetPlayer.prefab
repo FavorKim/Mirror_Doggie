@@ -282,6 +282,7 @@ MonoBehaviour:
   _rotationSpeed: 100
   _health: 4
   netState: 
+  _name: 
 --- !u!1 &5704646795369533241
 GameObject:
   m_ObjectHideFlags: 0

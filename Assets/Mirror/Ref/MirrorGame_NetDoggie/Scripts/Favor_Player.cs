@@ -24,9 +24,9 @@ public class Favor_Player : NetworkBehaviour
     [Header("Stats Server")]
     [SyncVar] public int _health = 4;
     [SyncVar] public string netState;
-    //public FavorNetManager FavorNetManager;
 
     public string _name;
+
 
 
     public override void OnStartClient()
@@ -35,6 +35,8 @@ public class Favor_Player : NetworkBehaviour
         FavorNetManager.Instance.listPlayer.Add(this);
         FavorNetManager.Instance.PlayerName();
     }
+
+    
 
     private void Update()
     {
@@ -65,10 +67,11 @@ public class Favor_Player : NetworkBehaviour
     {
         GameObject projectileObj = Instantiate(_projectileObjPrefab, Transform_AtkPos.position, Transform_AtkPos.rotation);
         NetworkServer.Spawn(projectileObj);
+
         RpcOnAttack();
     }
 
-    [ClientRpc]
+    [ClientRpc]         // 호스트의 플레이어 1,2 클라의 플레이어 1,2
     void RpcOnAttack()
     {
         Animator_Player.SetTrigger("Atk");
@@ -102,17 +105,17 @@ public class Favor_Player : NetworkBehaviour
 
     private void CheckState()
     {
-        // 로컬일때만
         if (isLocalPlayer)
         {
             if (NetworkManager.singleton.mode == NetworkManagerMode.Host)
             {
-                NameUp("호스트 플레이어");
+                netState = "호스트 플레이어";
             }
             else
             {
-                NameUp("플레이어");
+                netState = "플레이어";
             }
+            NameUp(netState);
         }
     }
     
@@ -121,19 +124,22 @@ public class Favor_Player : NetworkBehaviour
     [Command]
     public void NameUp(string name)
     {
-        _name = name;
-        NameDown(_name);
+        Debug.Log($"{netId} - up");
+        //_name = name;
+        NameDown(name);
     }
 
     [ClientRpc]
     public void NameDown(string name)
     {
+        Debug.Log($"{netId} - down");
         TextMesh_HUD.text = name;
     }
 
     [Command]
     public void CheckName()
     {
+        Debug.Log($"{netId} - Check");
         NameDown(_name);
     }
 
