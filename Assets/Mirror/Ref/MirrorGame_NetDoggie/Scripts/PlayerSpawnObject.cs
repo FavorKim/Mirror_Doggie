@@ -88,7 +88,16 @@ public class PlayerSpawnObject : NetworkBehaviour
         RpcOnAttack();  
     }
 
-    [ClientRpc]
+    /*
+    rpc는 모든 클라에서 실행. 커맨드는 호출한 애만 호출, 실행은 서버에서.
+    rpc가 호출되었을 때, 애니메이터에 접근하여 트리거를 변경하는데.
+    이 경우 트리거를 설정할 애니메이터를 어떻게 찾아서 해당 객체의 애니메이터를 조작하는가?
+    Rpc는 모든 클라이언트가 실행하는 것이 아니라 호출한 클라이언트만 실행하는가?
+    위의 코드에서, 생성은 서버만 할 것이고, Rpc를 호출하며 모든 클라에서 rpc를 호출하는 것이 아닌가?
+    그게 아니라면 다른 클라이언트는 다른 클라이언트의 애니메이션이 실행되는 것을 확인할 방법이 없다.
+    */
+
+    [ClientRpc] 
     private void RpcOnAttack()
     {
         Debug.Log($"{this.netId}가 공격");
