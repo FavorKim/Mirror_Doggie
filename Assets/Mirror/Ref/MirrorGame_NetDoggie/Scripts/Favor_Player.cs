@@ -22,20 +22,22 @@ public class Favor_Player : NetworkBehaviour
     public float _rotationSpeed = 100.0f;
 
     [Header("Stats Server")]
-    public int _health = 4;
-    public string netState;
+    [SyncVar] public int _health = 4;
+    [SyncVar] public string netState;
+    //public FavorNetManager FavorNetManager;
+
+    public string _name;
 
 
-    private void Start()
+    public override void OnStartClient()
     {
-        FavorNetManager.Instance.AddStateDict(this);
+        CheckState();
+        FavorNetManager.Instance.listPlayer.Add(this);
+        FavorNetManager.Instance.PlayerName();
     }
-
 
     private void Update()
     {
-        CommandSetHUD();
-
         SetHpUIOnUpdate(_health);
 
         if (CheckIsFocusedOnUpdate())
@@ -72,10 +74,11 @@ public class Favor_Player : NetworkBehaviour
         Animator_Player.SetTrigger("Atk");
     }
 
+
     [ClientRpc]
     private void SetHUDLocalorNot()
     {
-        netState = !isClientOnly ? $"{netId} - 호스트" : $"{netId} - 클라";
+        netState = isClientOnly ? "클라" : "호스트";
 
         TextMesh_HUD.text = isLocalPlayer ? $"[{netState}] 로컬"
             : $"[{netState}] 로컬 아님";
@@ -97,8 +100,42 @@ public class Favor_Player : NetworkBehaviour
     }
 
 
+    private void CheckState()
+    {
+        // 로컬일때만
+        if (isLocalPlayer)
+        {
+            if (NetworkManager.singleton.mode == NetworkManagerMode.Host)
+            {
+                NameUp("호스트 플레이어");
+            }
+            else
+            {
+                NameUp("플레이어");
+            }
+        }
+    }
+    
 
 
+    [Command]
+    public void NameUp(string name)
+    {
+        _name = name;
+        NameDown(_name);
+    }
+
+    [ClientRpc]
+    public void NameDown(string name)
+    {
+        TextMesh_HUD.text = name;
+    }
+
+    [Command]
+    public void CheckName()
+    {
+        NameDown(_name);
+    }
 
     [ServerCallback]
     private void OnTriggerEnter(Collider other)

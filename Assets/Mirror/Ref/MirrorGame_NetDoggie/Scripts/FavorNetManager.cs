@@ -2,45 +2,59 @@ using UnityEngine;
 using Mirror;
 using System.Collections.Generic;
 
-public class FavorNetManager : NetworkBehaviour
+public class FavorNetManager : NetworkManager
 {
-    public enum STATE
+    public List<Favor_Player> listPlayer;
+
+    public void PlayerName()
     {
-        NONE, HOST, CLIENT
+        foreach (var player in listPlayer)
+        {
+            player.CheckName();
+        }
     }
 
+
+    //public enum STATE
+    //{
+    //    NONE, HOST, CLIENT
+    //}
+
     private static FavorNetManager instance;
-    public static FavorNetManager Instance {  get { return instance; } }
+    public static FavorNetManager Instance { get { return instance; } }
 
-    public Dictionary<int, STATE> idStateDict = new Dictionary<int, STATE>();
+    //public Dictionary<int, STATE> idStateDict = new Dictionary<int, STATE>();
 
-    private void Start()
+
+
+    public override void Start()
     {
+        base.Start();
         if (instance != null)
             Destroy(instance.gameObject);
         instance = this;
         DontDestroyOnLoad(instance);
     }
 
-    public void AddStateDict(NetworkBehaviour player)
-    {
-        int id = (int)player.netId;
+    //public void AddStateDict(NetworkBehaviour player)
+    //{
+    //    int id = (int)player.netId;
 
-        foreach(int ids in idStateDict.Keys)
-        {
-            if (id == ids) return;
-        }
-        
-        STATE state;
-        if (player.isClientOnly) state = STATE.CLIENT;
-        else state = STATE.HOST;
+    //    foreach(int ids in idStateDict.Keys)
+    //    {
+    //        if (id == ids) return;
+    //    }
 
-        idStateDict.Add(id, state);
-    }
+    //    STATE state;
+    //    if (player.isClientOnly) state = STATE.CLIENT;
+    //    else state = STATE.HOST;
 
-    public string GetState(int netId)
-    {
-        return idStateDict[netId].ToString();
-    }
+    //    idStateDict.Add(id, state);
+    //}
+
+    //public string GetState(int netId)
+    //{
+    //    return idStateDict[netId].ToString();
+    //}
 
 }
