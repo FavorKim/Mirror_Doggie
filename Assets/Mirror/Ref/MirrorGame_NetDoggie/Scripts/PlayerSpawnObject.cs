@@ -24,7 +24,7 @@ public class PlayerSpawnObject : NetworkBehaviour
     [Header("Stats Server")]
     [SyncVar] public int _health = 4;
 
-    // Å¬¶ó, ¼­¹ö µÎ ±ºµ¥ ¸ğµÎ ÀÛµ¿ÇØ¾ß ÇÏ´Â ºÎºĞÀ» ÀÛ¼ºÇØ¾ß ÇÔ.
+    // í´ë¼, ì„œë²„ ë‘ êµ°ë° ëª¨ë‘ ì‘ë™í•´ì•¼ í•˜ëŠ” ë¶€ë¶„ì„ ì‘ì„±í•´ì•¼ í•¨.
     public void Update()
     {
         SetHealthbarOnUpdate(_health);
@@ -34,28 +34,39 @@ public class PlayerSpawnObject : NetworkBehaviour
         CheckIsLocalPlayerOnUpdate();
     }
 
-    // ·ÎÄÃ¿¡¼­¸¸ µ¹¸®´Â ºÎºĞ
+    // ë¡œì»¬ì—ì„œë§Œ ëŒë¦¬ëŠ” ë¶€ë¶„
     private void CheckIsLocalPlayerOnUpdate()
     {
         if(this.isLocalPlayer == false) return;
 
-        // ·ÎÄÃ ÇÃ·¹ÀÌ¾îÀÇ È¸Àü
+        // ë¡œì»¬ í”Œë ˆì´ì–´ì˜ íšŒì „
         float horizontal = Input.GetAxis("Horizontal");
         transform.Rotate(0, horizontal * _rotationSpeed * Time.deltaTime, 0);
 
-        // ·ÎÄÃ ÇÃ·¹ÀÌ¾îÀÇ ÀÌµ¿
+        // ë¡œì»¬ í”Œë ˆì´ì–´ì˜ ì´ë™
         float vertical = Input.GetAxis("Vertical");
         Vector3 foward = transform.TransformDirection(Vector3.forward);
-        NavAgent_Player.velocity = foward * Mathf.Max(vertical,0)*NavAgent_Player.speed;
+        NavAgent_Player.velocity = foward * Mathf.Max(vertical, 0) * NavAgent_Player.speed;
         Animator_Player.SetBool("Moving", NavAgent_Player.velocity != Vector3.zero);
 
-        // ·ÎÄÃ ÇÃ·¹ÀÌ¾îÀÇ °ø°İ
+        // ë¡œì»¬ í”Œë ˆì´ì–´ì˜ ê³µê²©
         if (Input.GetKeyDown(_atkKey))
         {
-            CommandAtk();   // Ä¿¸Çµå´Â Å¬¶ó¿¡¼­ È£ÃâÇÑ´Ù. È£Ãâ ¸¸
+            CommandAtk();   // ì»¤ë§¨ë“œëŠ” í´ë¼ì—ì„œ í˜¸ì¶œí•œë‹¤. í˜¸ì¶œ ë§Œ
         }
 
+        RotateLocalPlayer();
+    }
 
+    private void RotateLocalPlayer()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray,out RaycastHit hit, 100))
+        {
+            Debug.DrawRay(ray.origin, hit.point);
+            Vector3 lookRotate = new Vector3(hit.point.x, Transform_Player.position.y, hit.point.z);
+            Transform_Player.LookAt(lookRotate);
+        }
     }
 
     private bool CheckIsFocusedOnUpdate()
@@ -68,10 +79,12 @@ public class PlayerSpawnObject : NetworkBehaviour
         TextMesh_HealthBar.text = new string('-', health);
     }
 
-    // Å¬¶ó¿¡¼­ ¼­¹ö·Î È£ÃâÀº ÇÏÁö¸¸, µ¿ÀÛÀº ¼­¹ö¸¸
+    // í´ë¼ì—ì„œ ì„œë²„ë¡œ í˜¸ì¶œì€ í•˜ì§€ë§Œ, ë™ì‘ì€ ì„œë²„ë§Œ
     [Command]
     private void CommandAtk()
     {
+        GameObject atkObjectForSpawn = Instantiate(Prefab_AtkObject, Transform_AtkSpawnPos.transform.position, Transform_AtkSpawnPos.transform.rotation);
+        NetworkServer.Spawn(atkObjectForSpawn);
 
     }
 
@@ -81,7 +94,7 @@ public class PlayerSpawnObject : NetworkBehaviour
 
     }
 
-    // Å¬¶ó¿¡¼­ ¾Æ·¡ ÇÔ¼ö°¡ ½ÇÇàµÇÁö ¾Ê°Ô ÇÔ (¼­¹ö, Å¬¶ó µÑ ´Ù ½ÇÇàÇÏ¸é ¾ÈµÇ´Â °æ¿ì. ¼­¹ö¿¡¼­¸¸ ½ÇÇàÇØ¾ßÇÏ´Â °æ¿ì.)
+    // í´ë¼ì—ì„œ ì•„ë˜ í•¨ìˆ˜ê°€ ì‹¤í–‰ë˜ì§€ ì•Šê²Œ í•¨ (ì„œë²„, í´ë¼ ë‘˜ ë‹¤ ì‹¤í–‰í•˜ë©´ ì•ˆë˜ëŠ” ê²½ìš°. ì„œë²„ì—ì„œë§Œ ì‹¤í–‰í•´ì•¼í•˜ëŠ” ê²½ìš°.)
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
