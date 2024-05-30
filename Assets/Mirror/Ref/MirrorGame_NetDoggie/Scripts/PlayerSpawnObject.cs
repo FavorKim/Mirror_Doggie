@@ -31,11 +31,30 @@ public class PlayerSpawnObject : NetworkBehaviour
 
         if (CheckIsFocusedOnUpdate() == false) return;
 
-        CheckIsLocalPlayerOnUpdate()
+        CheckIsLocalPlayerOnUpdate();
     }
 
+    // 로컬에서만 돌리는 부분
     private void CheckIsLocalPlayerOnUpdate()
     {
+        if(this.isLocalPlayer == false) return;
+
+        // 로컬 플레이어의 회전
+        float horizontal = Input.GetAxis("Horizontal");
+        transform.Rotate(0, horizontal * _rotationSpeed * Time.deltaTime, 0);
+
+        // 로컬 플레이어의 이동
+        float vertical = Input.GetAxis("Vertical");
+        Vector3 foward = transform.TransformDirection(Vector3.forward);
+        NavAgent_Player.velocity = foward * Mathf.Max(vertical,0)*NavAgent_Player.speed;
+        Animator_Player.SetBool("Moving", NavAgent_Player.velocity != Vector3.zero);
+
+        // 로컬 플레이어의 공격
+        if (Input.GetKeyDown(_atkKey))
+        {
+            CommandAtk();   // 커맨드는 클라에서 호출한다. 호출 만
+        }
+
 
     }
 
@@ -62,7 +81,7 @@ public class PlayerSpawnObject : NetworkBehaviour
 
     }
 
-    // 클라에서 아래 함수가 실행되지 않도록 ServerCallback을 달아줌 (서버, 클라 둘 다 실행하면 안되는 경우. 서버에서만 실행해야하는 경우.)
+    // 클라에서 아래 함수가 실행되지 않게 함 (서버, 클라 둘 다 실행하면 안되는 경우. 서버에서만 실행해야하는 경우.)
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
